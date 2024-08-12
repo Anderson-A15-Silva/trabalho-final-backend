@@ -1,12 +1,12 @@
-const db = require('mysql2/promise'); // Use a versão promise do mysql2
+import mysql2 from 'mysql2/promise';
+import readline from 'readline-sync';
 
-const biblioteca = db.createPool({
+const biblioteca = mysql2.createPool({
     host: 'localhost',
     user: 'root',
     password: 'root',
     database: 'biblioteca'
 });
-const readline = require('readline-sync');
 
 let opcaoEscolhida = 10;
 
@@ -20,7 +20,7 @@ function exibirMenu(){
     console.log('6. Encerrar')
     console.log('----------------------------------')
     const menu = readline.questionInt('Escolha uma das opcoes: ');
-    opcaoEscolhida = parseInt(menu);
+    opcaoEscolhida = menu;
 }
 
 
@@ -61,7 +61,7 @@ function menuPrincipal(){
         if (opcaoEscolhida == 2){
             (async () => {
                 try {
-                    const idCadastro = parseInt(readline.questionInt('ID: '));
+                    const idCadastro = readline.questionInt('ID: ');
                     const [rows] = await biblioteca.query('SELECT * FROM Cadastros WHERE id_cadastro = ?', [idCadastro]);
                     console.log(JSON.stringify(rows));
                     console.log('--------------------------------------------------------------------');
@@ -76,8 +76,8 @@ function menuPrincipal(){
             (async () => {
                 try {
                     const observacoes = readline.question('Observacoes: ');
-                    const idCliente = parseInt(readline.questionInt('Cliente ID: '));
-                    const idLivro = parseInt(readline.questionInt('Livro ID: '));
+                    const idCliente = readline.questionInt('Cliente ID: ');
+                    const idLivro = readline.questionInt('Livro ID: ');
                     const dataCadastro = readline.question('Data (YY/MM/DD HH/MM/SS): ');
         
                     const [rows] = await biblioteca.query('INSERT INTO Cadastros (observacoes, id_cliente, id_livro, data_cadastro) VALUES (?,?,?,?)', [observacoes, idCliente, idLivro, dataCadastro]);
@@ -94,10 +94,10 @@ function menuPrincipal(){
         if (opcaoEscolhida == 4){
             (async () => {
                 try {
-                    const idCadastro = parseInt(readline.questionInt('ID: '));
+                    const idCadastro = readline.questionInt('ID: ');
                     const observacoes = readline.question('Observacoes: ');
-                    const idCliente = parseInt(readline.questionInt('Cliente ID: '));
-                    const idLivro = parseInt(readline.questionInt('Livro ID: '));
+                    const idCliente = readline.questionInt('Cliente ID: ');
+                    const idLivro = readline.questionInt('Livro ID: ');
                     const dataCadastro = readline.question('Data (YY/MM/DD HH/MM/SS): ');
         
                     const [rows] = await biblioteca.query('UPDATE Cadastros SET observacoes = ?, id_cliente = ?, id_livro = ?, data_cadastro = ? WHERE id_cadastro = ?', [observacoes, idCliente, idLivro, dataCadastro, idCadastro]);
@@ -164,7 +164,7 @@ function fornecedor(){
     if (opcaoEscolhida == 2){
         (async () => {
             try {
-                const id = parseInt(readline.questionInt('ID: '))
+                const id = readline.questionInt('ID: ')
 
                 const [rows] = await biblioteca.query('SELECT * FROM Fornecedores WHERE id = ?', [id]);
                 console.log(JSON.stringify(rows));
@@ -268,7 +268,7 @@ function livro(){
     if (opcaoEscolhida == 2){
         (async () => {
             try {
-                const id = parseInt(readline.questionInt('ID: '))
+                const id = readline.questionInt('ID: ')
 
                 const [rows] = await biblioteca.query('SELECT * FROM Livros WHERE id = ?', [id]);
                 console.log(JSON.stringify(rows));
@@ -376,7 +376,7 @@ function fileira(){
     if (opcaoEscolhida == 2){
         (async () => {
             try {
-                const id = parseInt(readline.questionInt('ID: '))
+                const id = readline.questionInt('ID: ')
 
                 const [rows] = await biblioteca.query('SELECT * FROM Fileiras WHERE id = ?', [id]);
                 console.log(JSON.stringify(rows));
@@ -480,7 +480,7 @@ function cliente(){
     if (opcaoEscolhida == 2){
         (async () => {
             try {
-                const id = parseInt(readline.questionInt('ID: '))
+                const id = readline.questionInt('ID: ')
 
                 const [rows] = await biblioteca.query('SELECT * FROM Clientes WHERE id = ?', [id]);
                 console.log(JSON.stringify(rows));

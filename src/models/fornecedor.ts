@@ -1,4 +1,5 @@
 import { db } from "../database";
+import { RowDataPacket, ResultSetHeader } from "mysql2";
 
 export class Fornecedor{
     private _id: number;
@@ -15,44 +16,64 @@ export class Fornecedor{
         this._empresa = empresa;
     }
 
-    static async getAll(){
+    static async getAll(): Promise<RowDataPacket[]>{
         try {
-            const [rows] = await db.query('SELECT * FROM Fornecedores');
+            const [rows] = await db.query<RowDataPacket[]>('SELECT * FROM Fornecedores');
             return rows;
-        } catch {
-            throw new Error('Erro ao buscar fornecedores no banco de dados.');
+        } catch(error) {
+            if(error instanceof Error) {
+                throw new Error('Erro ao buscar fornecedores no banco de dados.');
+            } else {
+                throw new Error('Erro desconhecido.');
+            }
         }
     }
     static async getById(id: number){
         try {
-            const [rows] = await db.query('SELECT * FROM Fornecedores WHERE id = ?', [id]);
+            const [rows] = await db.query<RowDataPacket[]>('SELECT * FROM Fornecedores WHERE id = ?', [id]);
             return rows;
-        } catch {
-            throw new Error('Erro ao buscar fornecedor no banco de dados.');
+        } catch(error) {
+            if(error instanceof Error) {
+                throw new Error('Erro ao buscar fornecedor no banco de dados.');
+            } else {
+                throw new Error('Erro desconhecido.');
+            }
         }
     }
-    static async create(nome: string, email: string, telefone: number, empresa: string){
+    static async create(nome: string, email: string, telefone: number, empresa: string): Promise<ResultSetHeader>{
         try {
-            const [rows] = await db.query('INSERT INTO Fornecedores (nome, email, telefone, empresa) VALUES (?,?,?,?)', [nome, email, telefone, empresa]);
+            const [rows] = await db.query<ResultSetHeader>('INSERT INTO Fornecedores (nome, email, telefone, empresa) VALUES (?,?,?,?)', [nome, email, telefone, empresa]);
             return rows;
-         }catch {
-            throw new Error('Erro ao inserir fornecedor no banco de dados.');
+         }catch(error) {
+            if(error instanceof Error) {
+                throw new Error('Erro ao inserir fornecedor no banco de dados.');
+            } else {
+                throw new Error('Erro desconhecido.');
+            }
         }
     }
-    static async update(id: number, nome: string, email: string, telefone: number, empresa: string){
+    static async update(id: number, nome: string, email: string, telefone: number, empresa: string): Promise<ResultSetHeader>{
         try {
-            const [rows] = await db.query('UPDATE Fornecedores SET nome = ?, email = ?, telefone = ?, empresa = ? WHERE id = ?', [nome, email, telefone, empresa, id]);
+            const [rows] = await db.query<ResultSetHeader>('UPDATE Fornecedores SET nome = ?, email = ?, telefone = ?, empresa = ? WHERE id = ?', [nome, email, telefone, empresa, id]);
             return rows;
-        } catch {
-            throw new Error('Erro ao atualizar fornecedor no banco de dados.');
+        } catch(error) {
+            if(error instanceof Error) {
+                throw new Error('Erro ao atualizar fornecedor no banco de dados.');
+            } else {
+                throw new Error('Erro desconhecido.');
+            }
         }
     }
-    static async delete(id: number){
+    static async delete(id: number): Promise<ResultSetHeader>{
         try {
-            const [rows] = await db.query('DELETE FROM Fornecedores WHERE id = ?', [id]);
+            const [rows] = await db.query<ResultSetHeader>('DELETE FROM Fornecedores WHERE id = ?', [id]);
             return rows;
-        } catch {
-            throw new Error('Erro ao deletar fornecedor no banco de dados.');
+        } catch(error) {
+            if(error instanceof Error) {
+                throw new Error('Erro ao deletar fornecedor no banco de dados.');
+            } else {
+                throw new Error('Erro desconhecido.');
+            }
         }    
     }
 }

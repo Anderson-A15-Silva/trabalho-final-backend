@@ -1,4 +1,5 @@
 import { db } from "../database";
+import { RowDataPacket, ResultSetHeader } from "mysql2";
 
 export class Cliente{
     private _id: number;
@@ -13,44 +14,64 @@ export class Cliente{
         this._telefone = telefone;
     }
 
-    static async getAll(){
+    static async getAll(): Promise<RowDataPacket[]>{
         try {
-            const [rows] = await db.query('SELECT * FROM Clientes');
+            const [rows] = await db.query<RowDataPacket[]>('SELECT * FROM Clientes');
             return rows;
-        } catch {
-            throw new Error('Erro ao buscar clientes no banco de dados.');
+        } catch(error) {
+            if (error instanceof Error){
+                throw new Error('Erro ao buscar clientes no banco de dados: '+error.message);
+            } else {
+                throw new Error('Erro desconhecido.');
+            }
+        } 
+    }
+    static async getById(id: number): Promise<RowDataPacket[]>{
+        try {
+            const [rows] = await db.query<RowDataPacket[]>('SELECT * FROM Clientes WHERE id = ?', [id]);
+            return rows;
+        } catch(error) {
+            if (error instanceof Error){
+                throw new Error('Erro ao buscar cliente no banco de dados: '+error.message);
+            } else {
+                throw new Error('Erro desconhecido.');
+            }
         }
     }
-    static async getById(id: number){
+    static async create(nome: string, email: string, telefone: number): Promise<ResultSetHeader>{
         try {
-            const [rows] = await db.query('SELECT * FROM Clientes WHERE id = ?', [id]);
+            const [rows] = await db.query<ResultSetHeader>('INSERT INTO Clientes (nome, email, telefone) VALUES (?,?,?)', [nome, email, telefone]);
             return rows;
-        } catch {
-            throw new Error('Erro ao buscar cliente no banco de dados.');
+        } catch(error) {
+            if (error instanceof Error){
+                throw new Error('Erro ao inserir cliente no banco de dados: '+error.message);
+            } else {
+                throw new Error('Erro desconhecido.');
+            }
         }
     }
-    static async create(nome: string, email: string, telefone: number){
+    static async update(id: number, nome: string, email: string, telefone: number): Promise<ResultSetHeader>{
         try {
-            const [rows] = await db.query('INSERT INTO Clientes (nome, email, telefone) VALUES (?,?,?)', [nome, email, telefone]);
+            const [rows] = await db.query<ResultSetHeader>('UPDATE Clientes SET nome = ?, email = ?, telefone = ? WHERE id = ?', [nome, email, telefone, id]);
             return rows;
-        } catch {
-            throw new Error('Erro ao inserir cliente no banco de dados.');
+        } catch(error) {
+            if (error instanceof Error){
+                throw new Error('Erro ao buscar cliente no banco de dados; '+error.message);
+            } else {
+                throw new Error('Erro desconhecido.');
+            }
         }
     }
-    static async update(id: number, nome: string, email: string, telefone: number){
+    static async delete(id: number): Promise<ResultSetHeader>{
         try {
-            const [rows] = await db.query('UPDATE Clientes SET nome = ?, email = ?, telefone = ? WHERE id = ?', [nome, email, telefone, id]);
+            const [rows] = await db.query<ResultSetHeader>('DELETE FROM Clientes WHERE id = ?', [id]);
             return rows;
-        } catch {
-            throw new Error('Erro ao buscar cliente no banco de dados.');
-        }
-    }
-    static async delete(id: number){
-        try {
-            const [rows] = await db.query('DELETE FROM Clientes WHERE id = ?', [id]);
-            return rows;
-        } catch {
-            throw new Error('Erro ao buscar cliente no banco de dados.');
+        } catch(error) {
+            if (error instanceof Error){
+                throw new Error('Erro ao buscar cliente no banco de dados: '+error.message);
+            } else {
+                throw new Error('Erro desconhecido.');
+            }
         }
     }
 }
