@@ -26,7 +26,7 @@ CREATE TABLE Fileiras(
 id INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
     nome CHAR(2) NOT NULL,
     genero VARCHAR(40) NOT NULL,
-id_livro INT NULL,
+    id_livro INT NULL,
     id_fornecedor INT NULL,
     FOREIGN KEY (id_livro) REFERENCES Livros(id),
     FOREIGN KEY (id_fornecedor) REFERENCES Fornecedores(id)
