@@ -16,5 +16,5 @@ app.use('/api/biblioteca', fornecedoresRoutes);
 app.use('/api/biblioteca', livrosRoutes);
 
 app.listen(PORT, ()=>{
-    console.log(`Servidor rodando em localhost:${port}`);
+    console.log(`Servidor rodando em localhost:${PORT}`);
 });
