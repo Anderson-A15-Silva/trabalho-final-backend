@@ -6,7 +6,7 @@ import fornecedoresRoutes from './routes/fornecedoresRoutes';
 import livrosRoutes from './routes/livrosRoutes';
 
 const app = express();
-const port = 3000;
+const PORT = 3000;
 
 app.use(express.json());
 app.use('/api/biblioteca', cadastroRoutes);
@@ -15,6 +15,6 @@ app.use('/api/biblioteca', fileirasRoutes);
 app.use('/api/biblioteca', fornecedoresRoutes);
 app.use('/api/biblioteca', livrosRoutes);
 
-app.listen(port, ()=>{
+app.listen(PORT, ()=>{
     console.log(`Servidor rodando em localhost:${port}`);
-})
+});
